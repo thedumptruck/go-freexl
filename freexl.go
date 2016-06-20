@@ -168,15 +168,15 @@ func (s *Sheet) getInfo(i int, handle unsafe.Pointer) error {
 
 			switch C.freexl_cell_get_type(cell) {
 			case CELL_DOUBLE:
-				row = append(row, fmt.Sprintf("%1.12f", float64(C.freexl_cell_get_double_value(cell))))
+				row[j] = fmt.Sprintf("%1.12f", float64(C.freexl_cell_get_double_value(cell)))
 			case CELL_INT:
-				row = append(row, fmt.Sprintf("%d", int(C.freexl_cell_get_int_value(cell))))
+				row[j] = fmt.Sprintf("%d", int(C.freexl_cell_get_int_value(cell)))
 			case CELL_TEXT, CELL_SST_TEXT, CELL_DATE, CELL_DATETIME, CELL_TIME:
-				row = append(row, C.GoString(C.freexl_cell_get_text_value(cell)))
+				row[j] = C.GoString(C.freexl_cell_get_text_value(cell))
 			default:
 				fallthrough
 			case CELL_NULL:
-				row = append(row, "")
+				row[j] = ""
 			}
 		}
 
