@@ -152,8 +152,8 @@ func (s *Sheet) getInfo(i int, handle unsafe.Pointer) error {
 		return fmt.Errorf("Freexl: failed to get dimensions: %s", ret)
 	}
 
-	s.MaxRow = int(numRow) - 1
-	s.MaxCol = int(numCol) - 1
+	s.MaxRow = int(numRow)
+	s.MaxCol = int(numCol)
 
 	s.Values = make([][]string, s.MaxRow)
 
