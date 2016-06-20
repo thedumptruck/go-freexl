@@ -12,10 +12,13 @@ func TestOpenFile(t *testing.T) {
 		t.Error(err)
 	}
 	for _, name := range glob {
-		_, err := Open(name)
+		w, err := Open(name)
 		if err != nil {
 			t.Error(err)
 		}
+		t.Log(w.Sheets[0].MaxRow)
+		t.Log(w.Sheets[0].MaxCol)
+		// t.Log(w.Sheets[0].Values)
 	}
 }
 

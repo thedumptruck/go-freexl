@@ -21,8 +21,8 @@ static double freexl_cell_get_double_value(FreeXL_CellValue cell) {
   return cell.value.double_value;
 }
 
-static char freexl_cell_get_text_value(FreeXL_CellValue cell) {
-  return *cell.value.text_value;
+static const char * freexl_cell_get_text_value(FreeXL_CellValue cell) {
+  return cell.value.text_value;
 }
 */
 import "C"
@@ -93,7 +93,7 @@ func OpenBinary(b []byte) (f *Freexl, err error) {
 func (f *Freexl) Open(path string) error {
 	pName := C.CString(path)
 	defer C.free(unsafe.Pointer(pName))
-	defer C.free(f.handle)
+	defer C.freexl_close(f.handle)
 
 	ret := C.freexl_open(pName, &f.handle)
 	if ret != OK {
@@ -152,13 +152,10 @@ func (s *Sheet) getInfo(i int, handle unsafe.Pointer) error {
 		return fmt.Errorf("Freexl: failed to get dimensions: %s", ret)
 	}
 
-	s.MaxRow = int(numRow)
-	s.MaxCol = int(numCol)
+	s.MaxRow = int(numRow) - 1
+	s.MaxCol = int(numCol) - 1
 
 	s.Values = make([][]string, s.MaxRow)
-
-	buffer := (*C.char)(C.malloc(100))
-	defer C.free(unsafe.Pointer(buffer))
 
 	for i, row := range s.Values {
 		row = make([]string, s.MaxCol)
@@ -175,7 +172,7 @@ func (s *Sheet) getInfo(i int, handle unsafe.Pointer) error {
 			case CELL_INT:
 				row = append(row, fmt.Sprintf("%d", int(C.freexl_cell_get_int_value(cell))))
 			case CELL_TEXT, CELL_SST_TEXT, CELL_DATE, CELL_DATETIME, CELL_TIME:
-				row = append(row, string(C.freexl_cell_get_text_value(cell)))
+				row = append(row, C.GoString(C.freexl_cell_get_text_value(cell)))
 			default:
 				fallthrough
 			case CELL_NULL:
