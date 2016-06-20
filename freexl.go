@@ -1,7 +1,7 @@
 package freexl
 
 /*
-#cgo linux pkg-config: libfreexl
+#cgo linux pkg-config: freexl
 #cgo darwin LDFLAGS: -lfreexl
 #cgo windows LDFLAGS: -lfreexl
 #include <stdlib.h>
