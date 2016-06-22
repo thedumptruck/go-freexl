@@ -6,6 +6,9 @@ go:
   - tip
 before_install:
   - sudo apt-get update -qq > apt-get.out 2>&1  || (cat apt-get.out && exit 1)
+  - sudo apt-get install wget
+  - wget -cqO- http://ftp.debian.org/debian/pool/main/f/freexl/freexl_1.0.2.orig.tar.gz | tar xz
+  - cd freexl-* && ./configure && make && sudo make install && make clean && cd .. && rm -rf freexl-*
 install: go build -x -v
 script: go test -v -bench=. -benchtime=3s
 matrix:
