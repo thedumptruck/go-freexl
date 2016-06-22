@@ -16,11 +16,19 @@ func TestOpenFile(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("MaxRow: %d, MaxCol: %d, Name: %s, Count: %d",
+		t.Logf("File: %s, MaxRow: %d, MaxCol: %d, Name: %s, Count: %d",
+			name,
 			w.Sheets[0].MaxRow,
 			w.Sheets[0].MaxCol,
 			w.Sheets[0].Name,
 			len(w.Sheets[0].Values))
+	}
+}
+
+func TestOpenNotExistedFile(t *testing.T) {
+	_, err := Open("./_xls/nothing-to-see-here")
+	if err == nil {
+		t.Error("Open non existance should return error")
 	}
 }
 
@@ -38,11 +46,27 @@ func TestOpenBinary(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("MaxRow: %d, MaxCol: %d, Name: %s, Count: %d",
+		t.Logf("File: %s, MaxRow: %d, MaxCol: %d, Name: %s, Count: %d",
+			name,
 			w.Sheets[0].MaxRow,
 			w.Sheets[0].MaxCol,
 			w.Sheets[0].Name,
 			len(w.Sheets[0].Values))
+	}
+}
+
+func TestOpenEmptyBinary(t *testing.T) {
+	var b []byte
+	_, err := OpenBinary(b)
+	if err == nil {
+		t.Error("open empty binary should return error")
+	}
+}
+
+func TestOpenInvalidBinary(t *testing.T) {
+	_, err := OpenBinary([]byte("test"))
+	if err == nil {
+		t.Error("open empty binary should return error")
 	}
 }
 

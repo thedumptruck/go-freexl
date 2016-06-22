@@ -11,9 +11,11 @@ before_install:
   - cd freexl-* && ./configure && make && sudo make install && make clean && cd .. && rm -rf freexl-*
   - go get -u golang.org/x/tools/cmd/cover github.com/mattn/goveralls
 install: go build -x -v
-script: 
-  - go test -v -bench=. -benchtime=3s -covermode=count -coverprofile=coverage.out
-  - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+script:
+  - go test -v -bench=. -benchtime=3s -benchmem
+after_script:
+  - go test -covermode=count -coverprofile=coverage.out && true
+  - goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN && true
 matrix:
   allowed_failures:
     go:
