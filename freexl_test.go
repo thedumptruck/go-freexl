@@ -16,9 +16,11 @@ func TestOpenFile(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		t.Log(w.Sheets[0].MaxRow)
-		t.Log(w.Sheets[0].MaxCol)
-		// t.Log(w.Sheets[0].Values)
+		t.Logf("MaxRow: %d, MaxCol: %d, Name: %s, Count: %d",
+			w.Sheets[0].MaxRow,
+			w.Sheets[0].MaxCol,
+			w.Sheets[0].Name,
+			len(w.Sheets[0].Values))
 	}
 }
 

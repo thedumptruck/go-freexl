@@ -129,9 +129,7 @@ func (f *Freexl) getInfo(t int) (int, error) {
 }
 
 func (s *Sheet) getInfo(i int, handle unsafe.Pointer) error {
-	name := C.CString("")
-	defer C.free(unsafe.Pointer(name))
-
+	var name *C.char
 	var numRow C.uint
 	var numCol C.ushort
 
