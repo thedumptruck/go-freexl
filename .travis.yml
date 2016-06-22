@@ -1,0 +1,15 @@
+language: go
+go:
+  - 1.1
+  - 1.2
+  - 1.5.1
+  - 1.6
+  - tip
+before_install:
+  - sudo apt-get update -qq > apt-get.out 2>&1  || (cat apt-get.out && exit 1)
+install: go build -x -v
+script: go test -v -bench=. -benchtime=3s
+matrix:
+  allowed_failures:
+    go:
+      - tip
