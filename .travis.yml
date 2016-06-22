@@ -9,8 +9,11 @@ before_install:
   - sudo apt-get install wget
   - wget -cqO- http://ftp.debian.org/debian/pool/main/f/freexl/freexl_1.0.2.orig.tar.gz | tar xz
   - cd freexl-* && ./configure && make && sudo make install && make clean && cd .. && rm -rf freexl-*
+  - go get -u golang.org/x/tools/cmd/cover github.com/mattn/goveralls
 install: go build -x -v
-script: go test -v -bench=. -benchtime=3s
+script: 
+  - go test -v -bench=. -benchtime=3s -covermode=count -coverprofile=coverage.out
+  - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
 matrix:
   allowed_failures:
     go:
